@@ -1,6 +1,15 @@
-.container {
-}
-
 .container button {
   margin: 1rem 1.5rem;
+}
+
+.container > div {
+  margin: 0 1.5rem;
+}
+
+.dataTable {
+  border: 1px solid #d9d9d9;
+}
+
+.dataTable > div > div > div > div {
+  font-weight: bold;
 }

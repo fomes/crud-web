@@ -1,0 +1,10 @@
+.container > span {
+  margin-right: 0.5rem;
+}
+
+.container > input {
+  border: 1px solid #d9d9d9;
+  height: 1.875rem;
+  border-radius: 4px;
+  padding-left: 0.5rem;
+}
