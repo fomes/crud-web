@@ -29,52 +29,54 @@ export default function Table() {
       name: "First Name",
       selector: (row: any) => row.firstName,
       sortable: true,
-      width: "16%",
+      width: "16.66%",
     },
     {
       name: "Last Name",
       selector: (row: any) => row.lastName,
       sortable: true,
-      width: "16%",
+      width: "16%.66",
     },
     {
       name: "Gender",
       selector: (row: any) => row.gender,
       sortable: true,
-      width: "14%",
+      width: "16.66%",
     },
     {
       name: "Address",
       selector: (row: any) => row.address.address || row.address,
       sortable: true,
-      width: "16%",
+      width: "16.66%",
     },
     {
       name: "Date of Birth",
       selector: (row: any) => row.birthDate,
       sortable: true,
-      width: "10%",
+      width: "16.66%",
     },
     {
       name: "Action",
-      width: "28%",
+      width: "16.66%",
       cell: (row: any) => (
         <>
-          <Button
-            variant="primary"
-            onClick={() => handleOpenEditModal(row.id)}
-            style={{ marginLeft: "0" }}
-          >
-            <BsFillPencilFill size={14} />
-            Edit
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => handleOpenDeleteModal(row.id)}
-          >
-            <FaTrashAlt size={14} />
-            Delete
-          </Button>
+          <div className={styles.containerTableBtn}>
+            <Button
+              variant="primary"
+              onClick={() => handleOpenEditModal(row.id)}
+              style={{ marginLeft: "0" }}
+            >
+              <BsFillPencilFill size={14} />
+              Edit
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => handleOpenDeleteModal(row.id)}
+            >
+              <FaTrashAlt size={14} />
+              Delete
+            </Button>
+          </div>
         </>
       ),
     },

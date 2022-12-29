@@ -1,5 +1,14 @@
-.container button {
+.container > button {
   margin: 1rem 3rem;
+}
+
+.containerTableBtn {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.containerTableBtn > button {
+  font-size: 0.9rem;
 }
 
 .container > div {
