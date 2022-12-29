@@ -9,6 +9,7 @@ import { BsFillPencilFill } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import ModalConfirmDelete from "./ModalConfirmDelete";
 import ModalEditPerson from "./ModalEditPerson";
+import { createUser, deleteUser, editUser } from "../services/api";
 
 export default function Table() {
   const [data, setData] = useState<any>([]);
@@ -16,7 +17,7 @@ export default function Table() {
   const [showModalEditPerson, setShowModalEditPerson] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [filterText, setFilterText] = React.useState("");
-  const [idToDelete, setIdToDelete] = useState<number>();
+  const [idToDelete, setIdToDelete] = useState("0");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -86,7 +87,7 @@ export default function Table() {
     React.useState(false);
 
   const getData = async () => {
-    const res = await fetch("https://dummyjson.com/users");
+    const res = await fetch("https://crud-app-ts.adaptable.app/users");
     const data = await res.json();
 
     setData(data.users);
@@ -129,7 +130,7 @@ export default function Table() {
     setShowModalEditPerson(false);
   };
 
-  const handleOpenDeleteModal = (id: number) => {
+  const handleOpenDeleteModal = (id: string) => {
     setShowDeleteModal(true);
     setShowModalEditPerson(false);
     setShowModalAddPerson(false);
@@ -140,16 +141,8 @@ export default function Table() {
     if (!firstName || !lastName || !gender || !address || !birth) {
       alert("Fill all the fields!");
     } else {
-      const newPerson = {
-        id: data.length + 1,
-        firstName,
-        lastName,
-        gender,
-        address,
-        birthDate: birth,
-      };
+      createUser(firstName, lastName, gender, address, birth);
 
-      setData([...data, newPerson]);
       setShowModalAddPerson(false);
       setFirstName("");
       setLastName("");
@@ -158,17 +151,20 @@ export default function Table() {
       setBirth("");
 
       alert(`${firstName} successfully added!`);
+      getData();
     }
   };
 
   const handleConfirmDelete = () => {
-    const updateData = data.filter((item: any) => item.id !== idToDelete);
-    setData(updateData);
+    deleteUser(idToDelete);
     handleCloseDeleteModal();
-    setIdToDelete(0);
+    setIdToDelete("0");
+
+    alert("User successfully deleted!");
+    getData();
   };
 
-  const handleOpenEditModal = (id: number) => {
+  const handleOpenEditModal = (id: string) => {
     setShowModalEditPerson(true);
     setShowModalAddPerson(false);
     setShowDeleteModal(false);
@@ -191,21 +187,8 @@ export default function Table() {
     if (!firstName || !lastName || !gender || !address || !birth) {
       alert("Fill all the fields!");
     } else {
-      const updateData = data.map((item: any) => {
-        if (item.id === idToDelete) {
-          return {
-            firstName,
-            lastName,
-            gender,
-            address,
-            birthDate: birth,
-          };
-        } else {
-          return item;
-        }
-      });
+      editUser(idToDelete, firstName, lastName, gender, address, birth);
 
-      setData(updateData);
       setFirstName("");
       setLastName("");
       setGender("");
@@ -214,7 +197,8 @@ export default function Table() {
 
       alert(`${firstName} successfully edited!`);
       setShowModalEditPerson(false);
-      setIdToDelete(0);
+      setIdToDelete("0");
+      getData();
     }
   };
 
