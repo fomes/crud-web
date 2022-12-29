@@ -8,10 +8,12 @@ import ModalAddPerson from "./ModalAddPerson";
 import { BsFillPencilFill } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import ModalConfirmDelete from "./ModalConfirmDelete";
+import ModalEditPerson from "./ModalEditPerson";
 
 export default function Table() {
   const [data, setData] = useState<any>([]);
   const [showModalAddPerson, setShowModalAddPerson] = useState(false);
+  const [showModalEditPerson, setShowModalEditPerson] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [filterText, setFilterText] = React.useState("");
   const [idToDelete, setIdToDelete] = useState<number>();
@@ -60,7 +62,7 @@ export default function Table() {
         <>
           <Button
             variant="primary"
-            onClick={handleOpenEditModal}
+            onClick={() => handleOpenEditModal(row.id)}
             style={{ marginLeft: "0" }}
           >
             <BsFillPencilFill size={14} />
@@ -133,6 +135,7 @@ export default function Table() {
       alert("Fill all the fields!");
     } else {
       const newPerson = {
+        id: data.length +1,
         firstName,
         lastName,
         gender,
@@ -156,9 +159,60 @@ export default function Table() {
     const updateData = data.filter((item: any) => item.id !== idToDelete);
     setData(updateData);
     handleCloseDeleteModal();
+    setIdToDelete(0);
   };
 
-  const handleOpenEditModal = () => {};
+  const handleOpenEditModal = (id: number) => {
+    setShowModalEditPerson(true);
+    setIdToDelete(id);
+
+    const filteredPerson = data.filter((item: any) => item.id === id);
+    setFirstName(filteredPerson[0].firstName);
+    setLastName(filteredPerson[0].lastName);
+    setGender(filteredPerson[0].gender);
+    setBirth(filteredPerson[0].birthDate);
+
+    if (filteredPerson[0]?.address?.address) {
+      setAddress(filteredPerson[0]?.address?.address);
+    } else {
+      setAddress(filteredPerson[0]?.address);
+    }
+  };
+
+  const handleConfirmEdit = () => {
+    if (!firstName || !lastName || !gender || !address || !birth) {
+      alert("Fill all the fields!");
+    } else {
+      const updateData = data.map((item: any) => {
+        if (item.id === idToDelete) {
+          return {
+            firstName,
+            lastName,
+            gender,
+            address,
+            birthDate: birth,
+          };
+        } else {
+          return item;
+        }
+      });
+
+      setData(updateData);
+      setFirstName("");
+      setLastName("");
+      setGender("");
+      setAddress("");
+      setBirth("");
+
+      alert(`${firstName} successfully edited!`);
+      setShowModalEditPerson(false);
+      setIdToDelete(0);
+    }
+  };
+
+  const handleCloseEditModal = () => {
+    setShowModalEditPerson(false);
+  };
 
   useEffect(() => {
     getData();
@@ -171,6 +225,22 @@ export default function Table() {
           show={showModalAddPerson}
           handleCloseModal={handleCloseAddModal}
           handleConfirmAdd={handleConfirmAdd}
+          handleFirstName={(event: any) => setFirstName(event.target.value)}
+          handleLastName={(event: any) => setLastName(event.target.value)}
+          handleGender={(event: any) => setGender(event.target.value)}
+          handleAddress={(event: any) => setAddress(event.target.value)}
+          handleBirth={(event: any) => setBirth(event.target.value)}
+        />
+
+        <ModalEditPerson
+          show={showModalEditPerson}
+          handleCloseEditModal={handleCloseEditModal}
+          handleConfirmEdit={handleConfirmEdit}
+          firstName={firstName}
+          lastName={lastName}
+          gender={gender}
+          address={address}
+          birth={birth}
           handleFirstName={(event: any) => setFirstName(event.target.value)}
           handleLastName={(event: any) => setLastName(event.target.value)}
           handleGender={(event: any) => setGender(event.target.value)}
