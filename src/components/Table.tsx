@@ -123,10 +123,14 @@ export default function Table() {
 
   const handleOpenAddModal = () => {
     setShowModalAddPerson(true);
+    setShowDeleteModal(false);
+    setShowModalEditPerson(false);
   };
 
   const handleOpenDeleteModal = (id: number) => {
     setShowDeleteModal(true);
+    setShowModalEditPerson(false);
+    setShowModalAddPerson(false);
     setIdToDelete(id);
   };
 
@@ -135,7 +139,7 @@ export default function Table() {
       alert("Fill all the fields!");
     } else {
       const newPerson = {
-        id: data.length +1,
+        id: data.length + 1,
         firstName,
         lastName,
         gender,
@@ -164,6 +168,8 @@ export default function Table() {
 
   const handleOpenEditModal = (id: number) => {
     setShowModalEditPerson(true);
+    setShowModalAddPerson(false);
+    setShowDeleteModal(false);
     setIdToDelete(id);
 
     const filteredPerson = data.filter((item: any) => item.id === id);
